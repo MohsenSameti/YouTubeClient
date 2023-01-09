@@ -1,4 +1,4 @@
 <resources>
     <string name="app_name">YouTubeClient</string>
-    <string name="label_authenticate">Authenticate</string>
+    <string name="label_authorize">Authorize</string>
 </resources>

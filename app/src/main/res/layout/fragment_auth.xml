@@ -7,10 +7,10 @@
     tools:context="com.samentic.youtubeclient.features.auth.ui.AuthFragment">
 
     <Button
-        android:id="@+id/btn_authenticate"
+        android:id="@+id/btn_authorize"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/label_authenticate"
+        android:text="@string/label_authorize"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

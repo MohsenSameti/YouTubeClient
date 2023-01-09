@@ -1,6 +1,7 @@
 plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
+    id 'kotlin-kapt'
 }
 
 android {
@@ -10,11 +11,25 @@ android {
     defaultConfig {
         applicationId "com.samentic.youtubeclient"
         minSdk 24
+        //noinspection OldTargetApi
         targetSdk 32
         versionCode 1
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+        def props = new Properties()
+        File secretFile = rootProject.file("client_secret.properties")
+        if(secretFile.exists()) {
+            secretFile.withInputStream { props.load(it)}
+        }
+
+        String clientId = props.getProperty("ID", "")
+        String redirectScheme = clientId.tokenize(".").reverse().join(".")
+        manifestPlaceholders += [redirectUriScheme: redirectScheme]
+        buildConfigField("String", "CLIENT_ID", "\"${clientId}\"")
+        buildConfigField("String", "CLIENT_SECRET", "\"${props.getProperty("SECRET", "")}\"")
+        buildConfigField("String", "REDIRECT_URL_SCHEME", "\"${redirectScheme}\"")
     }
 
     buildTypes {
@@ -48,6 +63,15 @@ dependencies {
     // Navigation
     implementation 'androidx.navigation:navigation-fragment-ktx:2.5.3'
     implementation 'androidx.navigation:navigation-ui-ktx:2.5.3'
+
+    // Dagger
+    implementation 'com.google.dagger:dagger:2.44.2'
+    kapt 'com.google.dagger:dagger-compiler:2.44.2'
+
+    // OAuth2
+    implementation 'net.openid:appauth:0.11.1'
+
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.1'
 
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.4'
