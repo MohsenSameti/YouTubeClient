@@ -4,6 +4,7 @@ import com.samentic.youtubeclient.YoutubeApplication
 import com.samentic.youtubeclient.core.di.viewmodel.ViewModelModule
 import com.samentic.youtubeclient.features.auth.data.AuthModule
 import com.samentic.youtubeclient.features.auth.ui.AuthFragment
+import com.samentic.youtubeclient.features.playlist.ui.PlayListsFragment
 import dagger.BindsInstance
 import dagger.Component
 import javax.inject.Singleton
@@ -18,6 +19,7 @@ import javax.inject.Singleton
 interface AppComponent {
 
     fun inject(fragment: AuthFragment)
+    fun inject(fragment: PlayListsFragment)
 
     @Component.Factory
     interface Factory {

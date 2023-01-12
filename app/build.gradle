@@ -49,6 +49,10 @@ android {
     buildFeatures {
         viewBinding true
     }
+    // this is added because of google-api related dependencies
+    packagingOptions {
+        excludes += 'META-INF/DEPENDENCIES'
+    }
 }
 
 dependencies {
@@ -73,6 +77,10 @@ dependencies {
     implementation 'net.openid:appauth:0.11.1'
 
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.1'
+
+    implementation("com.google.api-client:google-api-client-gson:2.1.1")
+    implementation("com.google.api-client:google-api-client:2.1.1")
+    implementation("com.google.apis:google-api-services-youtube:v3-rev20221108-2.0.0")
 
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.4'
