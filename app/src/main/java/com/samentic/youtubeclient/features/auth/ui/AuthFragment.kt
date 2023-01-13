@@ -88,7 +88,6 @@ class AuthFragment : Fragment(R.layout.fragment_auth) {
         }
 
         if (viewModel.isAuthorized()) {
-            Toast.makeText(requireContext(), "It is authorized", Toast.LENGTH_SHORT).show()
             gotoPlayListFragment()
         }
     }

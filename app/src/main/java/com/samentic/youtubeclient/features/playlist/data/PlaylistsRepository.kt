@@ -27,13 +27,21 @@ class PlaylistsRepository @Inject constructor(
             .build()
     }
 
-    suspend fun fetchPlayLists(): PlaylistListResponse {
-        return authRepository.ensureAccessToken<PlaylistListResponse> { accessToken ->
-            credential.accessToken = accessToken
-            youtube.playlists().list("id,snippet,player,contentDetails,localizations,status".split(","))
+    // todo: rename to myPlayLists
+    // todo: add paging
+    suspend fun fetchPlayLists(): List<PlaylistEntity> {
+        return authRepository.ensureAccessToken { accessToken ->
+            if (credential.accessToken != accessToken)
+                credential.accessToken = accessToken
+            // TODO: handle possible exceptions
+            youtube.playlists()
+                .list("id,snippet,player,contentDetails,localizations,status".split(","))
                 .setMaxResults(50L)
                 .setMine(true)
                 .execute()
+                .let {
+                    it.items.map { playlist -> playlist.toPlayListEntity() }
+                }
         }
     }
 }

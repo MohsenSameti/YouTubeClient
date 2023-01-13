@@ -7,21 +7,21 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.lifecycleScope
 import com.samentic.youtubeclient.R
 import com.samentic.youtubeclient.core.di.findAppComponent
 import com.samentic.youtubeclient.databinding.FragmentPlaylistsBinding
 import com.zhuinden.fragmentviewbindingdelegatekt.viewBinding
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
+// FIXME: rename to Playlist
+// TODO: Add WatchLayer playlist (id=WL)
 class PlayListsFragment : Fragment(R.layout.fragment_playlists) {
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
 
     private val binding by viewBinding(FragmentPlaylistsBinding::bind)
     private val viewModel by viewModels<PlaylistsViewModel> { viewModelFactory }
+    private lateinit var adapter: PlaylistsAdapter
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -30,17 +30,31 @@ class PlayListsFragment : Fragment(R.layout.fragment_playlists) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        
-        binding.root.setOnClickListener {
-            Toast.makeText(requireContext(), "Oops", Toast.LENGTH_SHORT).show()
+
+        // region initView
+        binding.srlPlaylists.setOnRefreshListener {
+            viewModel.fetchPlaylists()
+        }
+        // endregion initView
+
+        // region initRecyclerView
+        adapter = PlaylistsAdapter {
+            Toast.makeText(requireContext(), it.title, Toast.LENGTH_SHORT).show()
+        }
+        binding.rvPlaylists.let { rvPlaylist ->
+            rvPlaylist.adapter = adapter
+            rvPlaylist.setHasFixedSize(true)
+        }
+        // endregion initRecyclerView
+
+        // region initObservation
+        viewModel.loading.observe(viewLifecycleOwner) { isLoading ->
+            binding.srlPlaylists.isRefreshing = isLoading
         }
 
-        lifecycleScope.launchWhenStarted {
-            val value = withContext(Dispatchers.IO) {
-                val playlists = viewModel.playlists()
-                playlists.items.joinToString("\n") { it.kind }
-            }
-            binding.tmp.text = value
+        viewModel.playlists.observe(viewLifecycleOwner) { playlists ->
+            adapter.submitList(playlists)
         }
+        // endregion initObservation
     }
 }
