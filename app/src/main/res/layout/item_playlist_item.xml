@@ -18,7 +18,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0"
-        app:layout_constraintWidth_percent="0.2"
+        app:layout_constraintWidth_percent="0.4"
         tools:src="@tools:sample/backgrounds/scenic" />
 
     <com.google.android.material.textview.MaterialTextView
@@ -33,10 +33,10 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/iv_thumbnail"
         app:layout_constraintTop_toTopOf="@id/iv_thumbnail"
-        tools:text="Watch Later" />
+        tools:text="One Piece Chapter 1068 Review" />
 
     <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/tv_item_count"
+        android:id="@+id/tv_channel_title"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="12dp"
@@ -45,6 +45,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/iv_thumbnail"
         app:layout_constraintTop_toBottomOf="@id/tv_title"
-        tools:text="314 Videos" />
+        tools:text="tekking 101" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

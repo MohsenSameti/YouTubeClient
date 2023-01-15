@@ -20,6 +20,20 @@
         android:id="@+id/playListsFragment"
         android:name="com.samentic.youtubeclient.features.playlist.ui.PlayListsFragment"
         android:label="PlayListsFragment"
-        tools:layout="@layout/fragment_playlists" />
+        tools:layout="@layout/fragment_playlists">
+        <action
+            android:id="@+id/action_playListsFragment_to_playlistItemsFragment"
+            app:destination="@id/playlistItemsFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/playlistItemsFragment"
+        android:name="com.samentic.youtubeclient.features.playlist.ui.PlaylistItemsFragment"
+        android:label="PlaylistItemsFragment"
+        tools:layout="@layout/fragment_playlist_items">
+        <argument
+            android:name="playlistId"
+            app:argType="string" />
+    </fragment>
 
 </navigation>

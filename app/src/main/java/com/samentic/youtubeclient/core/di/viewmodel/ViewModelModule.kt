@@ -3,6 +3,7 @@ package com.samentic.youtubeclient.core.di.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.samentic.youtubeclient.features.auth.ui.AuthViewModel
+import com.samentic.youtubeclient.features.playlist.ui.PlaylistItemsViewModel
 import com.samentic.youtubeclient.features.playlist.ui.PlaylistsViewModel
 import dagger.Binds
 import dagger.Module
@@ -23,5 +24,11 @@ abstract class ViewModelModule {
     @ViewModelKey(PlaylistsViewModel::class)
     @Binds
     abstract fun bindPlaylistsViewModel(viewModel: PlaylistsViewModel): ViewModel
+
+
+    @IntoMap
+    @ViewModelKey(PlaylistItemsViewModel::class)
+    @Binds
+    abstract fun bindPlaylistItemsViewModel(viewModel: PlaylistItemsViewModel): ViewModel
 
 }

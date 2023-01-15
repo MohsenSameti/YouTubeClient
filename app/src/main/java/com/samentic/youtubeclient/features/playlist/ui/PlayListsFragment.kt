@@ -3,12 +3,12 @@ package com.samentic.youtubeclient.features.playlist.ui
 import android.content.Context
 import android.os.Bundle
 import android.view.View
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import com.samentic.youtubeclient.R
 import com.samentic.youtubeclient.core.di.findAppComponent
+import com.samentic.youtubeclient.core.ui.safeNavigate
 import com.samentic.youtubeclient.databinding.FragmentPlaylistsBinding
 import com.zhuinden.fragmentviewbindingdelegatekt.viewBinding
 import javax.inject.Inject
@@ -39,7 +39,11 @@ class PlayListsFragment : Fragment(R.layout.fragment_playlists) {
 
         // region initRecyclerView
         adapter = PlaylistsAdapter {
-            Toast.makeText(requireContext(), it.title, Toast.LENGTH_SHORT).show()
+            safeNavigate(
+                PlayListsFragmentDirections.actionPlayListsFragmentToPlaylistItemsFragment(
+                    it.id
+                )
+            )
         }
         binding.rvPlaylists.let { rvPlaylist ->
             rvPlaylist.adapter = adapter

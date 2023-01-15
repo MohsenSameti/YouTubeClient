@@ -9,24 +9,31 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
-class PlaylistsViewModel @Inject constructor(
-    private val playlistsRepository: PlaylistsRepository
+class PlaylistItemsViewModel @Inject constructor(
+    private val playlistsRepository: PlaylistsRepository,
 ) : ViewModel() {
-
-    val playlists = MutableLiveData<List<PlaylistView>>()
 
     val loading = MutableLiveData<Boolean>()
 
-    init {
-        fetchPlaylists()
+    // TODO: use savedState or assisted
+    lateinit var playlistId: String
+        private set
+
+    val playlistItems = MutableLiveData<List<PlaylistItemView>>()
+
+    fun setPlaylistId(id: String) {
+        playlistId = id
+        fetchPlayListItems()
     }
 
-    fun fetchPlaylists() {
+    fun fetchPlayListItems() {
+        if(!this::playlistId.isInitialized) return
+
         loading.value = true
         viewModelScope.launch(Dispatchers.IO) {
-            val playlists = playlistsRepository.fetchPlayLists().map { it.toPlaylistView() }
+            val items = playlistsRepository.fetchPlayListItems(playlistId)
             withContext(Dispatchers.Main) {
-                this@PlaylistsViewModel.playlists.value = playlists
+                playlistItems.value = items.map { it.toPlaylistItemView() }
                 loading.value = false
             }
         }
