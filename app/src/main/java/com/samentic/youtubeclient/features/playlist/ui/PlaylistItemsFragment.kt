@@ -1,9 +1,9 @@
 package com.samentic.youtubeclient.features.playlist.ui
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
@@ -11,6 +11,7 @@ import androidx.navigation.fragment.navArgs
 import com.samentic.youtubeclient.R
 import com.samentic.youtubeclient.core.di.findAppComponent
 import com.samentic.youtubeclient.databinding.FragmentPlaylistItemsBinding
+import com.samentic.youtubeclient.features.player.PlayerActivity
 import com.zhuinden.fragmentviewbindingdelegatekt.viewBinding
 import javax.inject.Inject
 
@@ -42,8 +43,12 @@ class PlaylistItemsFragment : Fragment(R.layout.fragment_playlist_items) {
         // endregion initView
 
         // region initRecyclerView
-        adapter = PlaylistItemsAdapter {
-            Toast.makeText(requireContext(), it.title, Toast.LENGTH_SHORT).show()
+        adapter = PlaylistItemsAdapter { item ->
+            startActivity(
+                Intent(requireContext(), PlayerActivity::class.java).also {
+                    it.putExtra(PlayerActivity.EXTRA_VIDEO_ID, item.id)
+                }
+            )
         }
 
         binding.rvPlaylistItems.let { rvPlaylistItems ->

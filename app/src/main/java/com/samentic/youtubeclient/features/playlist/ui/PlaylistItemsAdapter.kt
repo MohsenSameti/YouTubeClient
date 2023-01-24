@@ -52,6 +52,9 @@ class PlaylistItemsAdapter(
             binding.tvTitle.let { tvTitle ->
                 tvTitle.text = item.title
                 TooltipCompat.setTooltipText(tvTitle, item.title)
+                tvTitle.setOnClickListener {
+                    binding.root.performClick()
+                }
             }
             binding.tvChannelTitle.text = item.videoOwnerChannelTitle
         }

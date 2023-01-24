@@ -23,6 +23,10 @@
             </intent-filter>
         </activity>
         <activity
+            android:name=".features.player.PlayerActivity"
+            android:exported="false"
+            android:screenOrientation="landscape" />
+        <activity
             android:name="net.openid.appauth.RedirectUriReceiverActivity"
             android:exported="true"
             tools:node="replace">
