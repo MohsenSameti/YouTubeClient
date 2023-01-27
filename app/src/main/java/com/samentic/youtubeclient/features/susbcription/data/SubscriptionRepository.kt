@@ -4,6 +4,7 @@ import com.google.api.client.auth.oauth2.Credential
 import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport
 import com.google.api.client.json.gson.GsonFactory
 import com.google.api.services.youtube.YouTube
+import com.samentic.youtubeclient.core.ui.pagination.PagedResult
 import com.samentic.youtubeclient.features.auth.data.AuthRepository
 import com.samentic.youtubeclient.features.playlist.data.AuthorizationHeaderAccessMethod
 import javax.inject.Inject
@@ -29,18 +30,26 @@ class SubscriptionRepository @Inject constructor(
             .build()
     }
 
-    suspend fun getSubscriptions() {
-        authRepository.ensureAccessToken { accessToken ->
+    suspend fun getSubscriptions(): PagedResult<List<SubscriptionEntity>> {
+        return authRepository.ensureAccessToken { accessToken ->
             if (credential.accessToken != accessToken)
                 credential.accessToken = accessToken
 
-            youtube.subscriptions()
+            val response = youtube.subscriptions()
                 .list("contentDetails,id,snippet,subscriberSnippet".split(","))
                 .setMine(true)
                 .setMaxResults(30L)
                 .execute().also {
+                    it.items[0]
                     println(it.items.size)
                 }
+
+            PagedResult<List<SubscriptionEntity>>(
+                data = response.items.map { it.toSubscriptionEntity() },
+                nextPageToken = response.nextPageToken,
+                resultsPerPage = response.pageInfo.resultsPerPage,
+                totalResults = response.pageInfo.totalResults
+            )
         }
     }
 

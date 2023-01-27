@@ -2,6 +2,7 @@ package com.samentic.youtubeclient.features.susbcription.ui
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -27,7 +28,18 @@ class SubscriptionListFragment : Fragment(R.layout.fragment_subscription_list) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel.fetchSubscriptions()
+        // region initView
+        binding.srlSubscriptionList.setOnRefreshListener {
+            viewModel.refresh()
+        }
+        // endregion initView
+
+        // region initObservation
+        viewModel.loading.observe(viewLifecycleOwner) { isLoading ->
+            Log.d("SubscriptionTAG", "loading: $isLoading")
+            binding.srlSubscriptionList.isRefreshing = isLoading
+        }
+        // endregion initObservation
     }
 
 }

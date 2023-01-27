@@ -1,5 +1,7 @@
 package com.samentic.youtubeclient.features.susbcription.ui
 
+import android.util.Log
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.samentic.youtubeclient.features.susbcription.data.SubscriptionRepository
@@ -11,10 +13,22 @@ class SubscriptionListViewModel @Inject constructor(
     private val subscriptionRepository: SubscriptionRepository
 ) : ViewModel() {
 
+    val loading = MutableLiveData<Boolean>()
+
+    init {
+        fetchSubscriptions()
+    }
+
     fun fetchSubscriptions() {
         viewModelScope.launch(Dispatchers.IO) {
-            subscriptionRepository.getSubscriptions()
+            loading.postValue(true)
+            val paged = subscriptionRepository.getSubscriptions()
+            Log.d("SubscriptionTAG", paged.data.joinToString("\n") { "${it.title} -> ${it.resourceChannelId}" })
+            loading.postValue(false)
         }
+    }
 
+    fun refresh() {
+        fetchSubscriptions()
     }
 }
