@@ -12,6 +12,7 @@ class PlaylistsRepository @Inject constructor(
     private val authRepository: AuthRepository
 ) {
 
+    // Duplicate 1: create youtube and credential
     private val credential: Credential by lazy {
         Credential.Builder(AuthorizationHeaderAccessMethod())
             .build()

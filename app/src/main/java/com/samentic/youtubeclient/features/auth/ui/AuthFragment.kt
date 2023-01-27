@@ -93,6 +93,6 @@ class AuthFragment : Fragment(R.layout.fragment_auth) {
     }
 
     private fun gotoPlayListFragment() {
-        safeNavigate(AuthFragmentDirections.actionAuthFragmentToPlayListsFragment())
+        safeNavigate(AuthFragmentDirections.actionAuthFragmentToSubscriptionListFragment())
     }
 }
