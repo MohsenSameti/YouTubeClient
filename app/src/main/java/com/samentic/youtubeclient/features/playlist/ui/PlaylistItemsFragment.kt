@@ -10,6 +10,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.navArgs
 import com.samentic.youtubeclient.R
 import com.samentic.youtubeclient.core.di.findAppComponent
+import com.samentic.youtubeclient.core.ui.pagination.PaginationScrollListener
 import com.samentic.youtubeclient.databinding.FragmentPlaylistItemsBinding
 import com.samentic.youtubeclient.features.player.PlayerActivity
 import com.zhuinden.fragmentviewbindingdelegatekt.viewBinding
@@ -38,7 +39,7 @@ class PlaylistItemsFragment : Fragment(R.layout.fragment_playlist_items) {
 
         // region initView
         binding.srlPlaylistItems.setOnRefreshListener {
-            viewModel.fetchPlayListItems()
+            viewModel.refresh()
         }
         // endregion initView
 
@@ -54,12 +55,41 @@ class PlaylistItemsFragment : Fragment(R.layout.fragment_playlist_items) {
         binding.rvPlaylistItems.let { rvPlaylistItems ->
             rvPlaylistItems.setHasFixedSize(true)
             rvPlaylistItems.adapter = adapter
+            rvPlaylistItems.addOnScrollListener(
+                object : PaginationScrollListener() {
+                    override fun isLoading(): Boolean {
+                        return viewModel.isLoadingItems() ||
+                                // TODO: can we somehow move this to scrollListener?
+                                adapter.currentList.lastOrNull() is PlayListItemsMoreItemView
+                    }
+
+                    override fun loadMore() {
+                        viewModel.fetchNextPage()
+                    }
+                }
+            )
         }
         // endregion initRecyclerView
 
         // region initObservation
         viewModel.loading.observe(viewLifecycleOwner) { isRefreshing ->
             binding.srlPlaylistItems.isRefreshing = isRefreshing
+        }
+
+        viewModel.moreLoading.observe(viewLifecycleOwner) { moreLoading ->
+            binding.srlPlaylistItems.isEnabled = !moreLoading
+            if (moreLoading) {
+                if (adapter.currentList.isNotEmpty() &&
+                    adapter.currentList.last() !is PlayListItemsMoreItemView
+                ) {
+                    adapter.submitList(
+                        buildList {
+                            addAll(adapter.currentList)
+                            add(PlayListItemsMoreItemView())
+                        }
+                    )
+                }
+            }
         }
 
         viewModel.playlistItems.observe(viewLifecycleOwner) { items ->

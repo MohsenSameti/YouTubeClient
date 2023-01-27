@@ -16,7 +16,7 @@ data class PlaylistItemView(
     val channelId: String,
     val videoOwnerChannelTitle: String,
     val videoOwnerChannelId: String
-)
+) : PlaylistItemsAdapterItem
 
 fun PlaylistItemEntity.toPlaylistItemView() = PlaylistItemView(
     id = id,

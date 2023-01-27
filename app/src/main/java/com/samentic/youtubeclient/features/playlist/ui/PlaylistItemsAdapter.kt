@@ -5,45 +5,87 @@ import androidx.appcompat.widget.TooltipCompat
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import androidx.viewbinding.ViewBinding
+import androidx.viewbinding.ViewBindings
+import com.samentic.youtubeclient.R
 import com.samentic.youtubeclient.core.ui.inflater
 import com.samentic.youtubeclient.core.ui.loadImage
 import com.samentic.youtubeclient.databinding.ItemPlaylistItemBinding
+import com.samentic.youtubeclient.databinding.ItemPlaylistItemsMoreLoadBinding
 
 class PlaylistItemsAdapter(
     private val onItemClick: (PlaylistItemView) -> Unit
-) : ListAdapter<PlaylistItemView, PlaylistItemsAdapter.ViewHolder>(
-    object : DiffUtil.ItemCallback<PlaylistItemView>() {
+) : ListAdapter<PlaylistItemsAdapterItem, PlaylistItemsAdapter.ViewHolder>(
+    object : DiffUtil.ItemCallback<PlaylistItemsAdapterItem>() {
         override fun areItemsTheSame(
-            oldItem: PlaylistItemView,
-            newItem: PlaylistItemView
+            oldItem: PlaylistItemsAdapterItem,
+            newItem: PlaylistItemsAdapterItem
         ): Boolean {
-            return oldItem.id == newItem.id
+            val oldId = when (oldItem) {
+                is PlaylistItemView -> oldItem.id
+                is PlayListItemsMoreItemView -> oldItem.id
+                else -> ""
+            }
+            val newId = when (newItem) {
+                is PlaylistItemView -> newItem.id
+                is PlayListItemsMoreItemView -> newItem.id
+                else -> ""
+            }
+            return oldId == newId
         }
 
         override fun areContentsTheSame(
-            oldItem: PlaylistItemView,
-            newItem: PlaylistItemView
+            oldItem: PlaylistItemsAdapterItem,
+            newItem: PlaylistItemsAdapterItem
         ): Boolean {
             return oldItem.hashCode() == newItem.hashCode()
         }
     }
 ) {
 
+    override fun getItemViewType(position: Int): Int {
+        return when (getItem(position)) {
+            is PlaylistItemView -> R.layout.item_playlist_item
+            is PlayListItemsMoreItemView -> R.layout.item_playlist_items_more_load
+            else -> throw IllegalStateException("Unknown type at position=$position")
+        }
+    }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        return ViewHolder(ItemPlaylistItemBinding.inflate(parent.inflater, parent, false))
+        return when (viewType) {
+            R.layout.item_playlist_item -> {
+                PlaylistItemViewHolder(
+                    ItemPlaylistItemBinding.inflate(parent.inflater, parent, false)
+                )
+            }
+            R.layout.item_playlist_items_more_load -> {
+                MoreLoadingViewHolder(
+                    ItemPlaylistItemsMoreLoadBinding.inflate(parent.inflater, parent, false)
+                )
+            }
+            else -> throw IllegalStateException("Unknown viewType")
+        }
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(getItem(position))
+        when (val item = getItem(position)) {
+            is PlaylistItemView -> (holder as PlaylistItemViewHolder).bind(item)
+        }
     }
 
-    inner class ViewHolder(
+    inner class MoreLoadingViewHolder(
+        binding: ItemPlaylistItemsMoreLoadBinding
+    ) : ViewHolder(binding)
+
+    inner class PlaylistItemViewHolder(
         private val binding: ItemPlaylistItemBinding
-    ) : RecyclerView.ViewHolder(binding.root) {
+    ) : ViewHolder(binding) {
 
         init {
             binding.root.setOnClickListener {
-                onItemClick(getItem(bindingAdapterPosition))
+                (getItem(bindingAdapterPosition) as? PlaylistItemView)?.let {
+                    onItemClick(it)
+                }
             }
         }
 
@@ -59,4 +101,6 @@ class PlaylistItemsAdapter(
             binding.tvChannelTitle.text = item.videoOwnerChannelTitle
         }
     }
+
+    abstract class ViewHolder(binding: ViewBinding) : RecyclerView.ViewHolder(binding.root)
 }

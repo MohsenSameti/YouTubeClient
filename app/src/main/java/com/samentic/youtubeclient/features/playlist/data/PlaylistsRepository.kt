@@ -4,6 +4,7 @@ import com.google.api.client.auth.oauth2.Credential
 import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport
 import com.google.api.client.json.gson.GsonFactory
 import com.google.api.services.youtube.YouTube
+import com.samentic.youtubeclient.core.ui.pagination.PagedResult
 import com.samentic.youtubeclient.features.auth.data.AuthRepository
 import javax.inject.Inject
 
@@ -44,20 +45,25 @@ class PlaylistsRepository @Inject constructor(
         }
     }
 
-    suspend fun fetchPlayListItems(id: String): List<PlaylistItemEntity> {
+    suspend fun fetchPlayListItems(id: String, pageToken: String?): PagedResult<List<PlaylistItemEntity>> {
         return authRepository.ensureAccessToken { accessToken ->
             if (credential.accessToken != accessToken)
                 credential.accessToken = accessToken
 
-            youtube.playlistItems()
+            val response = youtube.playlistItems()
                 .list("contentDetails,id,snippet,status".split(","))
-                .setMaxResults(50L)
+//                .setMaxResults(50L)
+                .setMaxResults(15)
                 .setPlaylistId(id)
+                .setPageToken(pageToken)
                 .execute()
-                .items
-                .map {
-                    it.toPlaylistItemEntity()
-                }
+
+            PagedResult(
+                data = response.items.map { it.toPlaylistItemEntity() },
+                nextPageToken = response.nextPageToken,
+                resultsPerPage = response.pageInfo.resultsPerPage,
+                totalResults = response.pageInfo.totalResults
+            )
         }
     }
 }
