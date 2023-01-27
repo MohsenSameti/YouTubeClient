@@ -5,6 +5,7 @@ import android.widget.ImageView
 import androidx.annotation.DrawableRes
 import coil.load
 import coil.request.CachePolicy
+import coil.transform.CircleCropTransformation
 import com.facebook.shimmer.Shimmer
 import com.facebook.shimmer.ShimmerDrawable
 import com.samentic.youtubeclient.R
@@ -12,7 +13,8 @@ import com.samentic.youtubeclient.R
 fun loadImage(
     imageView: ImageView,
     url: String?,
-    @DrawableRes errorRes: Int? = null
+    @DrawableRes errorRes: Int? = null,
+    isCircular: Boolean = false
 ) {
     if (url == null) return
     imageView.load(url) {
@@ -40,5 +42,9 @@ fun loadImage(
         errorRes?.let { error(it) }
         diskCachePolicy(CachePolicy.ENABLED)
         memoryCachePolicy(CachePolicy.ENABLED)
+
+        if(isCircular){
+            transformations(CircleCropTransformation())
+        }
     }
 }

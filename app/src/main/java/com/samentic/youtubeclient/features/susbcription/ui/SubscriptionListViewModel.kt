@@ -15,6 +15,8 @@ class SubscriptionListViewModel @Inject constructor(
 
     val loading = MutableLiveData<Boolean>()
 
+    val subscriptions = MutableLiveData<List<SubscriptionView>>()
+
     init {
         fetchSubscriptions()
     }
@@ -24,6 +26,7 @@ class SubscriptionListViewModel @Inject constructor(
             loading.postValue(true)
             val paged = subscriptionRepository.getSubscriptions()
             Log.d("SubscriptionTAG", paged.data.joinToString("\n") { "${it.title} -> ${it.resourceChannelId}" })
+            subscriptions.postValue(paged.data.map { it.toSubscriptionView() })
             loading.postValue(false)
         }
     }
