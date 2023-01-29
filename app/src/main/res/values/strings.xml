@@ -2,4 +2,6 @@
     <string name="app_name">YouTubeClient</string>
     <string name="label_authorize">Authorize</string>
     <string name="label_videos_count">%d Videos</string>
+    <string name="label_subscriptions">Subscriptions</string>
+    <string name="label_playlists">Playlists</string>
 </resources>

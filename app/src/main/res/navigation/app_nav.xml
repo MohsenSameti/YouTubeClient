@@ -5,22 +5,21 @@
     android:id="@+id/app_nav"
     app:startDestination="@id/authFragment">
 
+    <!-- region: Auth -->
     <fragment
         android:id="@+id/authFragment"
         android:name="com.samentic.youtubeclient.features.auth.ui.AuthFragment"
         android:label="authFragment"
         tools:layout="@layout/fragment_auth">
         <action
-            android:id="@+id/action_authFragment_to_playListsFragment"
-            app:destination="@id/playListsFragment"
-            app:popUpTo="@id/authFragment"
-            app:popUpToInclusive="true" />
-        <action
             android:id="@+id/action_authFragment_to_subscriptionListFragment"
             app:destination="@id/subscriptionListFragment"
             app:popUpTo="@id/authFragment"
             app:popUpToInclusive="true" />
     </fragment>
+    <!-- endregion: Auth -->
+
+    <!-- region: Playlist -->
     <fragment
         android:id="@+id/playListsFragment"
         android:name="com.samentic.youtubeclient.features.playlist.ui.PlayListsFragment"
@@ -40,11 +39,14 @@
             android:name="playlistId"
             app:argType="string" />
     </fragment>
+    <!-- endregion: Playlist -->
 
+    <!-- region: Subscription -->
     <fragment
         android:id="@+id/subscriptionListFragment"
         android:name="com.samentic.youtubeclient.features.susbcription.ui.SubscriptionListFragment"
         android:label="SubscriptionListFragment"
         tools:layout="@layout/fragment_subscription_list" />
+    <!-- endregion: Subscription -->
 
 </navigation>
