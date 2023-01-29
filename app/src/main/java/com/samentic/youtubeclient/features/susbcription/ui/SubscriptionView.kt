@@ -13,7 +13,7 @@ data class SubscriptionView(
     val thumbnails: ThumbnailDetails,
     val totalItemCount: Long,
     val newItemCount: Long
-)
+) : SubscriptionAdapterView
 
 fun SubscriptionEntity.toSubscriptionView() = SubscriptionView(
     id = id,

@@ -72,6 +72,7 @@ class PlaylistItemsViewModel @Inject constructor(
         }
     }
 
+    // Duplicate 2: refresh all pages. (whole paging process)
     fun refresh() {
         job?.cancel()
         loading.value = true

@@ -30,19 +30,17 @@ class SubscriptionRepository @Inject constructor(
             .build()
     }
 
-    suspend fun getSubscriptions(): PagedResult<List<SubscriptionEntity>> {
+    suspend fun getSubscriptions(pageToken: String?): PagedResult<List<SubscriptionEntity>> {
         return authRepository.ensureAccessToken { accessToken ->
             if (credential.accessToken != accessToken)
                 credential.accessToken = accessToken
 
             val response = youtube.subscriptions()
                 .list("contentDetails,id,snippet,subscriberSnippet".split(","))
+                .setPageToken(pageToken)
                 .setMine(true)
                 .setMaxResults(30L)
-                .execute().also {
-                    it.items[0]
-                    println(it.items.size)
-                }
+                .execute()
 
             PagedResult<List<SubscriptionEntity>>(
                 data = response.items.map { it.toSubscriptionEntity() },

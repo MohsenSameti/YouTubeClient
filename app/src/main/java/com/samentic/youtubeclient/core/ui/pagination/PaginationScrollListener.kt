@@ -1,10 +1,11 @@
 package com.samentic.youtubeclient.core.ui.pagination
 
+import android.util.Log
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
 abstract class PaginationScrollListener(
-    private val visibleThreshold: Int = 5
+    private val visibleThreshold: Int = 5 // FIXME: check for negative numbers
 ) : RecyclerView.OnScrollListener() {
 
     private var hasUserScrolled = false

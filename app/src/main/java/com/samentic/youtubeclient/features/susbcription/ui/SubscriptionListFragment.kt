@@ -10,6 +10,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import com.samentic.youtubeclient.R
 import com.samentic.youtubeclient.core.di.findAppComponent
+import com.samentic.youtubeclient.core.ui.pagination.PaginationScrollListener
 import com.samentic.youtubeclient.databinding.FragmentSubscriptionListBinding
 import com.zhuinden.fragmentviewbindingdelegatekt.viewBinding
 import javax.inject.Inject
@@ -44,6 +45,19 @@ class SubscriptionListFragment : Fragment(R.layout.fragment_subscription_list) {
         binding.rvSubscriptions.let { rvSubscriptions ->
             rvSubscriptions.setHasFixedSize(true)
             rvSubscriptions.adapter = adapter
+            rvSubscriptions.addOnScrollListener(
+                object : PaginationScrollListener(10) {
+                    override fun isLoading(): Boolean {
+                        return viewModel.isLoadingItems() ||
+                                // TODO: can we somehow move this to scrollListener?
+                                adapter.currentList.lastOrNull() is SubscriptionMoreItemView
+                    }
+
+                    override fun loadMore() {
+                        viewModel.fetchNextPage()
+                    }
+                }
+            )
         }
         // endregion initRecyclerView
 
@@ -51,6 +65,22 @@ class SubscriptionListFragment : Fragment(R.layout.fragment_subscription_list) {
         viewModel.loading.observe(viewLifecycleOwner) { isLoading ->
             Log.d("SubscriptionTAG", "loading: $isLoading")
             binding.srlSubscriptionList.isRefreshing = isLoading
+        }
+        viewModel.moreLoading.observe(viewLifecycleOwner) { moreLoading ->
+            binding.srlSubscriptionList.isEnabled = !moreLoading
+            if (moreLoading) {
+                if (adapter.currentList.isNotEmpty() &&
+                    adapter.currentList.last() !is SubscriptionMoreItemView
+                ) {
+                    adapter.submitList(
+                        buildList {
+                            addAll(adapter.currentList)
+                            add(SubscriptionMoreItemView())
+                        }
+                    )
+                }
+            }
+
         }
         viewModel.subscriptions.observe(viewLifecycleOwner) { subscriptions ->
             adapter.submitList(subscriptions)
