@@ -16,7 +16,7 @@ data class PlaylistEntity(
     val playerUrl: String
 )
 
-fun Playlist.toPlayListEntity() = PlaylistEntity(
+fun Playlist.toPlaylistEntity() = PlaylistEntity(
     id = id,
     publishedAt = snippet.publishedAt,
     channelId = snippet.channelId,

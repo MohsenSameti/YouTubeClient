@@ -13,9 +13,8 @@ import com.samentic.youtubeclient.databinding.FragmentPlaylistsBinding
 import com.zhuinden.fragmentviewbindingdelegatekt.viewBinding
 import javax.inject.Inject
 
-// FIXME: rename to Playlist
 // TODO: Add WatchLayer playlist (id=WL)
-class PlayListsFragment : Fragment(R.layout.fragment_playlists) {
+class PlaylistsFragment : Fragment(R.layout.fragment_playlists) {
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
 
@@ -40,7 +39,7 @@ class PlayListsFragment : Fragment(R.layout.fragment_playlists) {
         // region initRecyclerView
         adapter = PlaylistsAdapter {
             safeNavigate(
-                PlayListsFragmentDirections.actionPlayListsFragmentToPlaylistItemsFragment(
+                PlaylistsFragmentDirections.actionPlaylistsFragmentToPlaylistItemsFragment(
                     it.id
                 )
             )

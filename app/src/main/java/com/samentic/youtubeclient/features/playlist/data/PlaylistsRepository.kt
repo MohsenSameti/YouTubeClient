@@ -30,7 +30,7 @@ class PlaylistsRepository @Inject constructor(
 
     // todo: rename to myPlayLists
     // todo: add paging
-    suspend fun fetchPlayLists(): List<PlaylistEntity> {
+    suspend fun fetchPlaylists(): List<PlaylistEntity> {
         return authRepository.ensureAccessToken { accessToken ->
             if (credential.accessToken != accessToken)
                 credential.accessToken = accessToken
@@ -41,12 +41,12 @@ class PlaylistsRepository @Inject constructor(
                 .setMine(true)
                 .execute()
                 .let {
-                    it.items.map { playlist -> playlist.toPlayListEntity() }
+                    it.items.map { playlist -> playlist.toPlaylistEntity() }
                 }
         }
     }
 
-    suspend fun fetchPlayListItems(id: String, pageToken: String?): PagedResult<List<PlaylistItemEntity>> {
+    suspend fun fetchPlaylistItems(id: String, pageToken: String?): PagedResult<List<PlaylistItemEntity>> {
         return authRepository.ensureAccessToken { accessToken ->
             if (credential.accessToken != accessToken)
                 credential.accessToken = accessToken

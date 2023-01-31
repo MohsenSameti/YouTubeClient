@@ -6,7 +6,6 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewbinding.ViewBinding
-import androidx.viewbinding.ViewBindings
 import com.samentic.youtubeclient.R
 import com.samentic.youtubeclient.core.ui.inflater
 import com.samentic.youtubeclient.core.ui.loadImage
@@ -23,12 +22,12 @@ class PlaylistItemsAdapter(
         ): Boolean {
             val oldId = when (oldItem) {
                 is PlaylistItemView -> oldItem.id
-                is PlayListItemsMoreItemView -> oldItem.id
+                is PlaylistItemsMoreItemView -> oldItem.id
                 else -> ""
             }
             val newId = when (newItem) {
                 is PlaylistItemView -> newItem.id
-                is PlayListItemsMoreItemView -> newItem.id
+                is PlaylistItemsMoreItemView -> newItem.id
                 else -> ""
             }
             return oldId == newId
@@ -46,7 +45,7 @@ class PlaylistItemsAdapter(
     override fun getItemViewType(position: Int): Int {
         return when (getItem(position)) {
             is PlaylistItemView -> R.layout.item_playlist_item
-            is PlayListItemsMoreItemView -> R.layout.item_playlist_items_more_load
+            is PlaylistItemsMoreItemView -> R.layout.item_playlist_items_more_load
             else -> throw IllegalStateException("Unknown type at position=$position")
         }
     }

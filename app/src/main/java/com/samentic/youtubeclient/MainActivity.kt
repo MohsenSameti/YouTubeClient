@@ -27,7 +27,7 @@ class MainActivity : AppCompatActivity() {
                 override fun onFragmentStarted(fm: FragmentManager, f: Fragment) {
                     navController.currentDestination?.id?.let { id ->
                         binding.tlMain.isVisible = id == R.id.subscriptionListFragment ||
-                                id == R.id.playListsFragment
+                                id == R.id.playlistsFragment
                     }
 
                 }
@@ -53,7 +53,7 @@ class MainActivity : AppCompatActivity() {
                     if (tab.position == 0) {
                         navController.popBackStack(R.id.subscriptionListFragment, false)
                     } else if (tab.position == 1) {
-                        navController.navigate(R.id.playListsFragment)
+                        navController.navigate(R.id.playlistsFragment)
                     }
                 }
 
@@ -71,7 +71,7 @@ class MainActivity : AppCompatActivity() {
                 super.onBackPressed()
             }
 
-            R.id.playListsFragment -> {
+            R.id.playlistsFragment -> {
                 binding.tlMain.selectTab(binding.tlMain.getTabAt(0))
             }
 

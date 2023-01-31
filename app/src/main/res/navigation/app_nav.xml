@@ -21,12 +21,12 @@
 
     <!-- region: Playlist -->
     <fragment
-        android:id="@+id/playListsFragment"
-        android:name="com.samentic.youtubeclient.features.playlist.ui.PlayListsFragment"
-        android:label="PlayListsFragment"
+        android:id="@+id/playlistsFragment"
+        android:name="com.samentic.youtubeclient.features.playlist.ui.PlaylistsFragment"
+        android:label="PlaylistsFragment"
         tools:layout="@layout/fragment_playlists">
         <action
-            android:id="@+id/action_playListsFragment_to_playlistItemsFragment"
+            android:id="@+id/action_playlistsFragment_to_playlistItemsFragment"
             app:destination="@id/playlistItemsFragment" />
     </fragment>
 

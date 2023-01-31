@@ -38,10 +38,10 @@ class PlaylistItemsViewModel @Inject constructor(
     fun setPlaylistId(id: String) {
         if (this::playlistId.isInitialized && playlistId == id) return
         playlistId = id
-        fetchPlayListItems()
+        fetchPlaylistItems()
     }
 
-    private fun fetchPlayListItems(pageToken: String? = null) {
+    private fun fetchPlaylistItems(pageToken: String? = null) {
         if (!this::playlistId.isInitialized) return
 
         if (pageToken != null) {
@@ -101,7 +101,7 @@ class PlaylistItemsViewModel @Inject constructor(
     }
 
     private suspend fun getPage(pageToken: String?): PagedResult<List<PlaylistItemEntity>> {
-        return playlistsRepository.fetchPlayListItems(playlistId, pageToken)
+        return playlistsRepository.fetchPlaylistItems(playlistId, pageToken)
     }
 
     fun isLoadingItems(): Boolean {
@@ -114,7 +114,7 @@ class PlaylistItemsViewModel @Inject constructor(
         if (totalItems != -1) { // there is nextPage
             if (currentPage * itemsPerPage < totalItems && nextPageToken != null) {
                 currentPage++
-                fetchPlayListItems(nextPageToken)
+                fetchPlaylistItems(nextPageToken)
             }
         }
     }

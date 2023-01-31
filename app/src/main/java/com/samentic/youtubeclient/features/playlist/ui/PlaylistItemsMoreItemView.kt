@@ -1,5 +1,5 @@
 package com.samentic.youtubeclient.features.playlist.ui
 
-data class PlayListItemsMoreItemView(
+data class PlaylistItemsMoreItemView(
     val id: String = "somethingConstant"
 ) : PlaylistItemsAdapterItem

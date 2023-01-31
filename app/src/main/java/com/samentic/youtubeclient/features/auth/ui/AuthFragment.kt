@@ -66,7 +66,7 @@ class AuthFragment : Fragment(R.layout.fragment_auth) {
                         viewModel.updateAuthState(response, exp)
                         Log.d("OAuth2", "$response")
                         Toast.makeText(requireContext(), "Yaaaaay", Toast.LENGTH_SHORT).show()
-                        gotoPlayListFragment()
+                        gotoSubscriptionListFragment()
                         isLoading = false
                     }
             } else {
@@ -88,11 +88,11 @@ class AuthFragment : Fragment(R.layout.fragment_auth) {
         }
 
         if (viewModel.isAuthorized()) {
-            gotoPlayListFragment()
+            gotoSubscriptionListFragment()
         }
     }
 
-    private fun gotoPlayListFragment() {
+    private fun gotoSubscriptionListFragment() {
         safeNavigate(AuthFragmentDirections.actionAuthFragmentToSubscriptionListFragment())
     }
 }

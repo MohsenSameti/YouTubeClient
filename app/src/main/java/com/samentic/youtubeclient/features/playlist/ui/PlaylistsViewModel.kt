@@ -24,7 +24,7 @@ class PlaylistsViewModel @Inject constructor(
     fun fetchPlaylists() {
         loading.value = true
         viewModelScope.launch(Dispatchers.IO) {
-            val playlists = playlistsRepository.fetchPlayLists().map { it.toPlaylistView() }
+            val playlists = playlistsRepository.fetchPlaylists().map { it.toPlaylistView() }
             withContext(Dispatchers.Main) {
                 this@PlaylistsViewModel.playlists.value = playlists
                 loading.value = false

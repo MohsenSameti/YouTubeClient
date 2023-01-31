@@ -60,7 +60,7 @@ class PlaylistItemsFragment : Fragment(R.layout.fragment_playlist_items) {
                     override fun isLoading(): Boolean {
                         return viewModel.isLoadingItems() ||
                                 // TODO: can we somehow move this to scrollListener?
-                                adapter.currentList.lastOrNull() is PlayListItemsMoreItemView
+                                adapter.currentList.lastOrNull() is PlaylistItemsMoreItemView
                     }
 
                     override fun loadMore() {
@@ -80,12 +80,12 @@ class PlaylistItemsFragment : Fragment(R.layout.fragment_playlist_items) {
             binding.srlPlaylistItems.isEnabled = !moreLoading
             if (moreLoading) {
                 if (adapter.currentList.isNotEmpty() &&
-                    adapter.currentList.last() !is PlayListItemsMoreItemView
+                    adapter.currentList.last() !is PlaylistItemsMoreItemView
                 ) {
                     adapter.submitList(
                         buildList {
                             addAll(adapter.currentList)
-                            add(PlayListItemsMoreItemView())
+                            add(PlaylistItemsMoreItemView())
                         }
                     )
                 }
