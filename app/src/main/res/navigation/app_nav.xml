@@ -32,9 +32,9 @@
 
     <fragment
         android:id="@+id/playlistItemsFragment"
-        android:name="com.samentic.youtubeclient.features.playlist.ui.PlaylistItemsFragment"
+        android:name="com.samentic.youtubeclient.features.playlist.ui.PlaylistDetailFragment"
         android:label="PlaylistItemsFragment"
-        tools:layout="@layout/fragment_playlist_items">
+        tools:layout="@layout/fragment_playlist_detail">
         <argument
             android:name="playlistId"
             app:argType="string" />

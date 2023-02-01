@@ -11,19 +11,19 @@ import androidx.navigation.fragment.navArgs
 import com.samentic.youtubeclient.R
 import com.samentic.youtubeclient.core.di.findAppComponent
 import com.samentic.youtubeclient.core.ui.pagination.PaginationScrollListener
-import com.samentic.youtubeclient.databinding.FragmentPlaylistItemsBinding
+import com.samentic.youtubeclient.databinding.FragmentPlaylistDetailBinding
 import com.samentic.youtubeclient.features.player.PlayerActivity
 import com.zhuinden.fragmentviewbindingdelegatekt.viewBinding
 import javax.inject.Inject
 
-class PlaylistItemsFragment : Fragment(R.layout.fragment_playlist_items) {
+class PlaylistDetailFragment : Fragment(R.layout.fragment_playlist_detail) {
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
 
-    private val binding by viewBinding(FragmentPlaylistItemsBinding::bind)
-    private val viewModel by viewModels<PlaylistItemsViewModel> { viewModelFactory }
-    private lateinit var adapter: PlaylistItemsAdapter
-    private val params by navArgs<PlaylistItemsFragmentArgs>()
+    private val binding by viewBinding(FragmentPlaylistDetailBinding::bind)
+    private val viewModel by viewModels<PlaylistDetailViewModel> { viewModelFactory }
+    private lateinit var adapter: PlaylistDetailAdapter
+    private val params by navArgs<PlaylistDetailFragmentArgs>()
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -44,7 +44,7 @@ class PlaylistItemsFragment : Fragment(R.layout.fragment_playlist_items) {
         // endregion initView
 
         // region initRecyclerView
-        adapter = PlaylistItemsAdapter { item ->
+        adapter = PlaylistDetailAdapter { item ->
             startActivity(
                 Intent(requireContext(), PlayerActivity::class.java).also {
                     it.putExtra(PlayerActivity.EXTRA_VIDEO_ID, item.id)

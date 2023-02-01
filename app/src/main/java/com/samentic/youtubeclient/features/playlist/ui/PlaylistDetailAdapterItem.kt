@@ -1,3 +1,3 @@
 package com.samentic.youtubeclient.features.playlist.ui
 
-interface PlaylistItemsAdapterItem
+interface PlaylistDetailAdapterItem

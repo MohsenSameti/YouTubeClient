@@ -14,7 +14,7 @@ import kotlinx.coroutines.withContext
 import javax.inject.Inject
 import kotlin.math.min
 
-class PlaylistItemsViewModel @Inject constructor(
+class PlaylistDetailViewModel @Inject constructor(
     private val playlistsRepository: PlaylistsRepository,
 ) : ViewModel() {
 

@@ -12,13 +12,13 @@ import com.samentic.youtubeclient.core.ui.loadImage
 import com.samentic.youtubeclient.databinding.ItemPlaylistItemBinding
 import com.samentic.youtubeclient.databinding.ItemPlaylistItemsMoreLoadBinding
 
-class PlaylistItemsAdapter(
+class PlaylistDetailAdapter(
     private val onItemClick: (PlaylistItemView) -> Unit
-) : ListAdapter<PlaylistItemsAdapterItem, PlaylistItemsAdapter.ViewHolder>(
-    object : DiffUtil.ItemCallback<PlaylistItemsAdapterItem>() {
+) : ListAdapter<PlaylistDetailAdapterItem, PlaylistDetailAdapter.ViewHolder>(
+    object : DiffUtil.ItemCallback<PlaylistDetailAdapterItem>() {
         override fun areItemsTheSame(
-            oldItem: PlaylistItemsAdapterItem,
-            newItem: PlaylistItemsAdapterItem
+            oldItem: PlaylistDetailAdapterItem,
+            newItem: PlaylistDetailAdapterItem
         ): Boolean {
             val oldId = when (oldItem) {
                 is PlaylistItemView -> oldItem.id
@@ -34,8 +34,8 @@ class PlaylistItemsAdapter(
         }
 
         override fun areContentsTheSame(
-            oldItem: PlaylistItemsAdapterItem,
-            newItem: PlaylistItemsAdapterItem
+            oldItem: PlaylistDetailAdapterItem,
+            newItem: PlaylistDetailAdapterItem
         ): Boolean {
             return oldItem.hashCode() == newItem.hashCode()
         }
