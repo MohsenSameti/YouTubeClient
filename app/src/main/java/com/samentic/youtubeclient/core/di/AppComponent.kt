@@ -15,7 +15,7 @@ import javax.inject.Singleton
 @Component(
     modules = [
         ViewModelModule::class, ContextModule::class, LocalModule::class,
-        AuthModule::class
+        AuthModule::class, YoutubeModule::class
     ]
 )
 interface AppComponent {
