@@ -4,4 +4,9 @@
     <string name="label_videos_count">%d Videos</string>
     <string name="label_subscriptions">Subscriptions</string>
     <string name="label_playlists">Playlists</string>
+    <string name="label_videos">Videos</string>
+    <string name="label_subscriber_count">Subscriber Count:</string>
+    <string name="label_view_count">View Count:</string>
+    <string name="label_video_count">Video Count:</string>
+    <string name="label_since">Since:</string>
 </resources>

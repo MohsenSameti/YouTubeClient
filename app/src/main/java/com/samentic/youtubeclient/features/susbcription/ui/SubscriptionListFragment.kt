@@ -11,6 +11,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.samentic.youtubeclient.R
 import com.samentic.youtubeclient.core.di.findAppComponent
 import com.samentic.youtubeclient.core.ui.pagination.PaginationScrollListener
+import com.samentic.youtubeclient.core.ui.safeNavigate
 import com.samentic.youtubeclient.databinding.FragmentSubscriptionListBinding
 import com.zhuinden.fragmentviewbindingdelegatekt.viewBinding
 import javax.inject.Inject
@@ -39,7 +40,12 @@ class SubscriptionListFragment : Fragment(R.layout.fragment_subscription_list) {
 
         // region initRecyclerView
         adapter = SubscriptionListAdapter { subscription ->
-            Toast.makeText(requireContext(), subscription.title, Toast.LENGTH_SHORT).show()
+            safeNavigate(
+                SubscriptionListFragmentDirections.actionSubscriptionListFragmentToChannelDetailFragment(
+                    channelId = subscription.resourceChannelId,
+                    uploadsPlaylist = subscription.uploadPlayList.orEmpty()
+                )
+            )
         }
 
         binding.rvSubscriptions.let { rvSubscriptions ->

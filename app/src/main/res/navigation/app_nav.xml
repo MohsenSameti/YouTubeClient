@@ -46,7 +46,25 @@
         android:id="@+id/subscriptionListFragment"
         android:name="com.samentic.youtubeclient.features.susbcription.ui.SubscriptionListFragment"
         android:label="SubscriptionListFragment"
-        tools:layout="@layout/fragment_subscription_list" />
+        tools:layout="@layout/fragment_subscription_list" >
+        <action
+            android:id="@+id/action_subscriptionListFragment_to_channelDetailFragment"
+            app:destination="@id/channelDetailFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/channelDetailFragment"
+        android:name="com.samentic.youtubeclient.features.channel.ui.ChannelDetailFragment"
+        android:label="ChannelDetailFragment" >
+        <argument
+            android:name="channelId"
+            app:argType="string" />
+        <argument
+            android:name="uploadsPlaylist"
+            app:argType="string" />
+        <action
+            android:id="@+id/action_channelDetailFragment_to_playlistItemsFragment"
+            app:destination="@id/playlistItemsFragment" />
+    </fragment>
     <!-- endregion: Subscription -->
 
 </navigation>

@@ -4,6 +4,7 @@ import com.samentic.youtubeclient.YoutubeApplication
 import com.samentic.youtubeclient.core.di.viewmodel.ViewModelModule
 import com.samentic.youtubeclient.features.auth.data.AuthModule
 import com.samentic.youtubeclient.features.auth.ui.AuthFragment
+import com.samentic.youtubeclient.features.channel.ui.ChannelDetailFragment
 import com.samentic.youtubeclient.features.playlist.ui.PlaylistsFragment
 import com.samentic.youtubeclient.features.playlist.ui.PlaylistDetailFragment
 import com.samentic.youtubeclient.features.susbcription.ui.SubscriptionListFragment
@@ -25,6 +26,8 @@ interface AppComponent {
     fun inject(fragment: PlaylistDetailFragment)
 
     fun inject(fragment: SubscriptionListFragment)
+
+    fun inject(fragment: ChannelDetailFragment)
 
     @Component.Factory
     interface Factory {

@@ -10,7 +10,8 @@ import dagger.multibindings.IntoMap
 @Module(
     includes = [
         SubscriptionViewModelModule::class,
-        PlaylistViewModelModule::class
+        PlaylistViewModelModule::class,
+        ChannelViewModelModule::class
     ]
 )
 abstract class ViewModelModule {
