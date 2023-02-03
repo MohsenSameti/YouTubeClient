@@ -49,7 +49,7 @@ class AuthRepository @Inject constructor(
         }
     }
 
-    suspend fun <T> ensureAccessToken(block: () -> T): T {
+    suspend fun <T> ensureAccessToken(block: suspend () -> T): T {
         if (!authState.needsTokenRefresh) {
             credential.accessToken = authState.accessToken.orEmpty()
             return block()

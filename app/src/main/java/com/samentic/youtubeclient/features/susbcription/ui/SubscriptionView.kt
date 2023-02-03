@@ -12,7 +12,8 @@ data class SubscriptionView(
     val publishedAt: DateTime,
     val thumbnails: ThumbnailDetails,
     val totalItemCount: Long,
-    val newItemCount: Long
+    val newItemCount: Long,
+    val uploadPlayList: String?
 ) : SubscriptionAdapterView
 
 fun SubscriptionEntity.toSubscriptionView() = SubscriptionView(
@@ -23,5 +24,6 @@ fun SubscriptionEntity.toSubscriptionView() = SubscriptionView(
     publishedAt = publishedAt,
     thumbnails = thumbnails,
     totalItemCount = totalItemCount,
-    newItemCount = newItemCount
+    newItemCount = newItemCount,
+    uploadPlayList = uploadPlayList
 )

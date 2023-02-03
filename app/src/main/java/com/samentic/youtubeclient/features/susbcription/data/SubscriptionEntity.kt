@@ -3,6 +3,7 @@ package com.samentic.youtubeclient.features.susbcription.data
 import com.google.api.client.util.DateTime
 import com.google.api.services.youtube.model.Subscription
 import com.google.api.services.youtube.model.ThumbnailDetails
+import com.samentic.youtubeclient.features.channel.data.ChannelEntity
 
 data class SubscriptionEntity(
     val id: String,
@@ -12,10 +13,11 @@ data class SubscriptionEntity(
     val publishedAt: DateTime,
     val thumbnails: ThumbnailDetails,
     val totalItemCount: Long,
-    val newItemCount: Long
+    val newItemCount: Long,
+    val uploadPlayList: String?
 )
 
-fun Subscription.toSubscriptionEntity() = SubscriptionEntity(
+fun Subscription.toSubscriptionEntity(channel: ChannelEntity?) = SubscriptionEntity(
     id = id,
     title = snippet.title,
     description = snippet.description,
@@ -23,5 +25,6 @@ fun Subscription.toSubscriptionEntity() = SubscriptionEntity(
     publishedAt = snippet.publishedAt,
     thumbnails = snippet.thumbnails,
     totalItemCount = contentDetails.totalItemCount,
-    newItemCount = contentDetails.newItemCount
+    newItemCount = contentDetails.newItemCount,
+    uploadPlayList = channel?.relatedPlaylists?.uploads
 )
