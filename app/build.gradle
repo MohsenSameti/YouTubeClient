@@ -90,6 +90,11 @@ dependencies {
     implementation("com.google.api-client:google-api-client:2.1.1")
     implementation("com.google.apis:google-api-services-youtube:v3-rev20221108-2.0.0")
 
+    // Room
+    implementation 'androidx.room:room-runtime:2.4.3'
+    kapt 'androidx.room:room-compiler:2.4.3'
+    implementation 'androidx.room:room-ktx:2.4.3'
+
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.4'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.0'
