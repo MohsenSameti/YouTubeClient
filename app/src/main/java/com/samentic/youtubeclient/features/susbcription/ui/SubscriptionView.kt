@@ -1,8 +1,8 @@
 package com.samentic.youtubeclient.features.susbcription.ui
 
 import com.google.api.client.util.DateTime
-import com.google.api.services.youtube.model.ThumbnailDetails
-import com.samentic.youtubeclient.features.susbcription.data.SubscriptionEntity
+import com.samentic.youtubeclient.core.data.db.thumbnail.ThumbnailEntity
+import com.samentic.youtubeclient.features.susbcription.data.SubscriptionDto
 
 data class SubscriptionView(
     val id: String,
@@ -10,20 +10,20 @@ data class SubscriptionView(
     val description: String,
     val resourceChannelId: String, // the channel of this subscription
     val publishedAt: DateTime,
-    val thumbnails: ThumbnailDetails,
+    val thumbnails: ThumbnailEntity?, // TODO: add error placeholder if it is null!
     val totalItemCount: Long,
     val newItemCount: Long,
     val uploadPlayList: String?
 ) : SubscriptionAdapterView
 
-fun SubscriptionEntity.toSubscriptionView() = SubscriptionView(
-    id = id,
-    title = title,
-    description = description,
-    resourceChannelId = resourceChannelId,
-    publishedAt = DateTime.parseRfc3339(publishedAt),
-    thumbnails = thumbnails!!, // TODO: remove non-null assertion -> Temporarily added
-    totalItemCount = totalItemCount,
-    newItemCount = newItemCount,
-    uploadPlayList = uploadPlayList
+fun SubscriptionDto.toSubscriptionView() = SubscriptionView(
+    id = subscription.id,
+    title = subscription.title,
+    description = subscription.description,
+    resourceChannelId = subscription.resourceChannelId,
+    publishedAt = DateTime.parseRfc3339(subscription.publishedAt),
+    thumbnails = thumbnail,
+    totalItemCount = subscription.totalItemCount,
+    newItemCount = subscription.newItemCount,
+    uploadPlayList = subscription.uploadPlayList
 )

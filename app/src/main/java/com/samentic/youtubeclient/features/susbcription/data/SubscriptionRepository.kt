@@ -15,7 +15,10 @@ class SubscriptionRepository @Inject constructor(
     private val youtube: YouTube
 ) {
 
-    suspend fun getSubscriptions(pageToken: String?): PagedResult<List<SubscriptionEntity>> {
+    fun getSubscriptions(page: Int, pageSize: Int) =
+        subscriptionLocalDataSource.getSubscriptions((page * pageSize).toLong())
+
+    suspend fun getSubscriptionsRemote(pageToken: String?): PagedResult<List<SubscriptionEntity>> {
         return authRepository.ensureAccessToken {
             val response = youtube.subscriptions()
                 .list("contentDetails,id,snippet,subscriberSnippet".split(","))
@@ -33,7 +36,10 @@ class SubscriptionRepository @Inject constructor(
                 it.toSubscriptionEntity(channel)
             }
 
-            subscriptionLocalDataSource.insertSubscriptions(subscriptions)
+            subscriptionLocalDataSource.insertSubscriptions(
+                subscriptions,
+                isFirstPage = pageToken == null
+            )
             thumbnailLocalDataSource.insertThumbnails(response.items.map { it.toThumbnailEntity() })
 
             PagedResult<List<SubscriptionEntity>>(

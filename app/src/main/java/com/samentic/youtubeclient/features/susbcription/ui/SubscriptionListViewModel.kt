@@ -1,8 +1,6 @@
 package com.samentic.youtubeclient.features.susbcription.ui
 
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import com.samentic.youtubeclient.core.ui.pagination.PagedResult
 import com.samentic.youtubeclient.features.susbcription.data.SubscriptionEntity
 import com.samentic.youtubeclient.features.susbcription.data.SubscriptionRepository
@@ -20,14 +18,20 @@ class SubscriptionListViewModel @Inject constructor(
     val loading = MutableLiveData<Boolean>()
     val moreLoading = MutableLiveData<Boolean>()
 
-    val subscriptions = MutableLiveData<List<SubscriptionView>>()
+    private var currentPage = 1
+
+    private val currentPageLiveData = MutableLiveData<Int>(currentPage)
+    val subscriptions = currentPageLiveData.switchMap {
+        subscriptionRepository.getSubscriptions(it, itemsPerPage)
+            .distinctUntilChanged()
+            .map { it.map { it.toSubscriptionView() } }
+    }
 
     private var totalItems: Int = -1
+
     // TODO: send this to api: do the same in playlist as well
     private var itemsPerPage: Int = 30//50
     private var nextPageToken: String? = null
-    var currentPage = 1
-        private set
 
     private var job: Job? = null
 
@@ -50,12 +54,9 @@ class SubscriptionListViewModel @Inject constructor(
             itemsPerPage = paged.resultsPerPage
             totalItems = paged.totalResults
             withContext(Dispatchers.Main) {
-                subscriptions.value = buildList {
-                    addAll(subscriptions.value.orEmpty())
-                    addAll(paged.data.map { it.toSubscriptionView() })
-                }
                 moreLoading.value = false
                 loading.value = false
+                currentPageLiveData.value = currentPage
             }
         }
     }
@@ -69,11 +70,9 @@ class SubscriptionListViewModel @Inject constructor(
             var page = 1
             var token: String? = null
             var result: PagedResult<List<SubscriptionEntity>>
-            val items = mutableListOf<SubscriptionView>()
             do {
                 result = getPage(token)
                 token = result.nextPageToken
-                items.addAll(result.data.map { it.toSubscriptionView() })
             } while (++page <= currentPage || token == null)
             currentPage = min(1, page - 1)
             totalItems = result.totalResults
@@ -83,13 +82,12 @@ class SubscriptionListViewModel @Inject constructor(
             withContext(Dispatchers.Main) {
                 loading.value = false
                 moreLoading.value = false
-                subscriptions.value = items
             }
         }
     }
 
     private suspend fun getPage(pageToken: String?): PagedResult<List<SubscriptionEntity>> {
-        return subscriptionRepository.getSubscriptions(pageToken)
+        return subscriptionRepository.getSubscriptionsRemote(pageToken)
     }
 
     fun isLoadingItems(): Boolean {

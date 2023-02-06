@@ -85,6 +85,7 @@ dependencies {
     implementation 'net.openid:appauth:0.11.1'
 
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.1'
+    implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.5.1'
 
     implementation("com.google.api-client:google-api-client-gson:2.1.1")
     implementation("com.google.api-client:google-api-client:2.1.1")

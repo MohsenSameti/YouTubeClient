@@ -91,7 +91,7 @@ class SubscriptionListAdapter(
         }
 
         fun bind(sub: SubscriptionView) {
-            loadImage(binding.ivThumbnail, sub.thumbnails.default.url, isCircular = true)
+            loadImage(binding.ivThumbnail, sub.thumbnails?.defaultUrl, isCircular = true)
             binding.tvTitle.text = sub.title
         }
     }

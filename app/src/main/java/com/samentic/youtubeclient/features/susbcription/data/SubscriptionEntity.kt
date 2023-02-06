@@ -1,28 +1,26 @@
 package com.samentic.youtubeclient.features.susbcription.data
 
 import androidx.room.Entity
-import androidx.room.Ignore
 import androidx.room.PrimaryKey
 import com.google.api.services.youtube.model.Subscription
-import com.google.api.services.youtube.model.ThumbnailDetails
 import com.samentic.youtubeclient.core.data.db.thumbnail.ThumbnailEntity
 import com.samentic.youtubeclient.core.data.db.thumbnail.ThumbnailType
 import com.samentic.youtubeclient.features.channel.data.ChannelEntity
 
 @Entity
-data class SubscriptionEntity @JvmOverloads constructor(
+data class SubscriptionEntity(
     @PrimaryKey
     val id: String,
     val title: String,
     val description: String,
     val resourceChannelId: String, // the channel of this subscription
     val publishedAt: String,
-    @Ignore
-    val thumbnails: ThumbnailDetails? = null,
     val totalItemCount: Long,
     val newItemCount: Long,
     val uploadPlayList: String?
-)
+) {
+    var softDeleteTime: Long? = null
+}
 
 fun Subscription.toSubscriptionEntity(channel: ChannelEntity?) = SubscriptionEntity(
     id = id,
@@ -30,7 +28,6 @@ fun Subscription.toSubscriptionEntity(channel: ChannelEntity?) = SubscriptionEnt
     description = snippet.description,
     resourceChannelId = snippet.resourceId.channelId,
     publishedAt = snippet.publishedAt.toStringRfc3339(),
-    thumbnails = snippet.thumbnails,
     totalItemCount = contentDetails.totalItemCount,
     newItemCount = contentDetails.newItemCount,
     uploadPlayList = channel?.relatedPlaylists?.uploads
