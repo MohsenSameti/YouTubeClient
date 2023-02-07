@@ -1,7 +1,8 @@
 package com.samentic.youtubeclient.features.channel.ui
 
 import com.google.api.client.util.DateTime
-import com.google.api.services.youtube.model.ThumbnailDetails
+import com.samentic.youtubeclient.core.data.db.thumbnail.ThumbnailEntity
+import com.samentic.youtubeclient.features.channel.data.ChannelDto
 import com.samentic.youtubeclient.features.channel.data.ChannelEntity
 import java.math.BigInteger
 
@@ -10,7 +11,7 @@ data class ChannelView(
     val title: String,
     val description: String?,
     val publishedAt: DateTime,
-    val thumbnails: ThumbnailDetails,
+    val thumbnail: ThumbnailEntity?, // TODO: add error placeholder if it is null!
     val relatedPlaylists: RelatedPlaylists,
     val viewCount: BigInteger,
     val subscriberCount: BigInteger,
@@ -24,17 +25,17 @@ data class ChannelView(
     )
 }
 
-fun ChannelEntity.toChannelView() = ChannelView(
-    id = id,
-    title = title,
-    description = description,
-    publishedAt = publishedAt,
-    thumbnails = thumbnails,
-    relatedPlaylists = relatedPlaylists.toChannelViewPlaylists(),
-    viewCount = viewCount,
-    subscriberCount = subscriberCount,
-    hiddenSubscriberCount = hiddenSubscriberCount,
-    videoCount = videoCount
+fun ChannelDto.toChannelView() = ChannelView(
+    id = channel.id,
+    title = channel.title,
+    description = channel.description,
+    publishedAt = DateTime(channel.publishedAt),
+    thumbnail = thumbnail,
+    relatedPlaylists = channel.relatedPlaylists.toChannelViewPlaylists(),
+    viewCount = channel.viewCount,
+    subscriberCount = channel.subscriberCount,
+    hiddenSubscriberCount = channel.hiddenSubscriberCount,
+    videoCount = channel.videoCount
 )
 
 fun ChannelEntity.RelatedPlaylists.toChannelViewPlaylists(): ChannelView.RelatedPlaylists {

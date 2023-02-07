@@ -64,8 +64,8 @@ class ChannelDetailFragment : Fragment(R.layout.fragment_channel_detail) {
 
         // region initView
         binding.tvDescription.setOnClickListener {
-            if(binding.tvDescription.text.isNotBlank()) {
-                if(binding.tvDescription.maxLines == 2) {
+            if (binding.tvDescription.text.isNotBlank()) {
+                if (binding.tvDescription.maxLines == 2) {
                     binding.tvDescription.maxLines = Int.MAX_VALUE
                 } else {
                     binding.tvDescription.maxLines = 2
@@ -82,16 +82,17 @@ class ChannelDetailFragment : Fragment(R.layout.fragment_channel_detail) {
         viewModel.loading.observe(viewLifecycleOwner) { isLoading ->
             binding.srlChannelDetail.isRefreshing = isLoading
         }
-        viewModel.detail.observe(viewLifecycleOwner) { channel ->
+        viewModel.detail.observe(viewLifecycleOwner) {
+            val channel = it ?: return@observe
             bindChannel(channel)
         }
         // endregion initObservation
     }
 
     private fun bindChannel(channel: ChannelView) {
-        loadImage(binding.ivThumbnail, channel.thumbnails.high.url)
+        loadImage(binding.ivThumbnail, channel.thumbnail?.highUrl)
         binding.tvTitle.text = channel.title
-        binding.tvDescription.let {  tvDescription ->
+        binding.tvDescription.let { tvDescription ->
             tvDescription.isVisible = !channel.description.isNullOrBlank()
             tvDescription.text = channel.description.orEmpty()
         }

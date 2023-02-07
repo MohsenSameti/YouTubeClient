@@ -1,8 +1,6 @@
 package com.samentic.youtubeclient.features.channel.ui
 
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import com.samentic.youtubeclient.features.channel.data.ChannelRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -13,31 +11,31 @@ class ChannelDetailViewModel @Inject constructor(
     private val channelRepository: ChannelRepository
 ) : ViewModel() {
 
-    private lateinit var channelId: String
+    private val channelId = MutableLiveData<String>()
 
     val loading = MutableLiveData<Boolean>()
-    val detail = MutableLiveData<ChannelView>()
+    val detail = channelId.switchMap { id ->
+        channelRepository.getChannel(id).map { it?.toChannelView() }
+    }
 
     init {
         fetchChannelDetail()
     }
 
     fun fetchChannelDetail() {
-        if (!this::channelId.isInitialized) return
-
-        loading.value = false
+        val channelId = this.channelId.value ?: return
+        loading.value = true
         viewModelScope.launch(Dispatchers.IO) {
-            val detail = channelRepository.getChannelById(channelId).toChannelView()
+            channelRepository.getChannelById(channelId)
             withContext(Dispatchers.Main) {
-                this@ChannelDetailViewModel.detail.value = detail
                 loading.value = false
             }
         }
     }
 
     fun setChannelId(channelId: String) {
-        if (!this::channelId.isInitialized || this.channelId != channelId) {
-            this.channelId = channelId
+        if (this.channelId.value != channelId) {
+            this.channelId.value = channelId
             fetchChannelDetail()
         }
     }

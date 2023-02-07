@@ -1,17 +1,21 @@
 package com.samentic.youtubeclient.features.channel.data
 
-import com.google.api.client.util.DateTime
+import androidx.room.Embedded
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 import com.google.api.services.youtube.model.Channel
-import com.google.api.services.youtube.model.ThumbnailDetails
+import com.samentic.youtubeclient.core.data.db.thumbnail.ThumbnailEntity
+import com.samentic.youtubeclient.core.data.db.thumbnail.ThumbnailType
 import java.math.BigInteger
 
+@Entity
 data class ChannelEntity(
+    @PrimaryKey
     val id: String,
     val title: String,
     val description: String?,
-    val publishedAt: DateTime,
-    val thumbnails: ThumbnailDetails,
-    val relatedPlaylists: RelatedPlaylists,
+    val publishedAt: String,
+    @Embedded val relatedPlaylists: RelatedPlaylists,
     val viewCount: BigInteger,
     val subscriberCount: BigInteger,
     val hiddenSubscriberCount: Boolean,
@@ -28,8 +32,7 @@ fun Channel.toChannelEntity() = ChannelEntity(
     id = id,
     title = snippet.title,
     description = snippet.description,
-    publishedAt = snippet.publishedAt,
-    thumbnails = snippet.thumbnails,
+    publishedAt = snippet.publishedAt.toStringRfc3339(),
     relatedPlaylists = ChannelEntity.RelatedPlaylists(
         uploads = contentDetails.relatedPlaylists.uploads,
         likes = contentDetails.relatedPlaylists.likes,
@@ -39,5 +42,16 @@ fun Channel.toChannelEntity() = ChannelEntity(
     subscriberCount = statistics.subscriberCount,
     hiddenSubscriberCount = statistics.hiddenSubscriberCount,
     videoCount = statistics.videoCount
-
 )
+
+fun Channel.toThumbnailEntity(): ThumbnailEntity {
+    return ThumbnailEntity(
+        ownerId = id,
+        ownerType = ThumbnailType.Channel,
+        defaultUrl = snippet?.thumbnails?.default?.url,
+        highUrl = snippet?.thumbnails?.high?.url,
+        mediumUrl = snippet?.thumbnails?.medium?.url,
+        standardUrl = snippet?.thumbnails?.standard?.url,
+        maxResolutionUrl = snippet?.thumbnails?.maxres?.url
+    )
+}
