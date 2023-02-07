@@ -6,6 +6,7 @@ import com.samentic.youtubeclient.core.data.db.thumbnail.ThumbnailDao
 import com.samentic.youtubeclient.core.data.db.thumbnail.ThumbnailEntity
 import com.samentic.youtubeclient.features.playlist.data.PlaylistDao
 import com.samentic.youtubeclient.features.playlist.data.PlaylistEntity
+import com.samentic.youtubeclient.features.playlist.data.PlaylistItemEntity
 import com.samentic.youtubeclient.features.susbcription.data.SubscriptionDao
 import com.samentic.youtubeclient.features.susbcription.data.SubscriptionEntity
 
@@ -13,7 +14,8 @@ import com.samentic.youtubeclient.features.susbcription.data.SubscriptionEntity
     entities = [
         SubscriptionEntity::class,
         ThumbnailEntity::class,
-        PlaylistEntity::class
+        PlaylistEntity::class,
+        PlaylistItemEntity::class
     ],
     version = 1,
     exportSchema = false

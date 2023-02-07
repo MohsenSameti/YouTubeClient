@@ -1,8 +1,8 @@
 package com.samentic.youtubeclient.features.playlist.ui
 
 import com.google.api.client.util.DateTime
-import com.google.api.services.youtube.model.ThumbnailDetails
-import com.samentic.youtubeclient.features.playlist.data.PlaylistItemEntity
+import com.samentic.youtubeclient.core.data.db.thumbnail.ThumbnailEntity
+import com.samentic.youtubeclient.features.playlist.data.PlaylistItemDto
 
 data class PlaylistItemView(
     val id: String,
@@ -10,7 +10,7 @@ data class PlaylistItemView(
     val position: Long,
     val playlistId: String,
     val title: String,
-    val thumbnails: ThumbnailDetails,
+    val thumbnails: ThumbnailEntity?, // TODO: add error placeholder if it is null!
     val publishedAt: DateTime,
     val channelTitle: String,
     val channelId: String,
@@ -18,16 +18,16 @@ data class PlaylistItemView(
     val videoOwnerChannelId: String
 ) : PlaylistDetailAdapterItem
 
-fun PlaylistItemEntity.toPlaylistItemView() = PlaylistItemView(
-    id = id,
-    description = description,
-    position = position,
-    playlistId = playlistId,
-    title = title,
-    thumbnails = thumbnails,
-    publishedAt = publishedAt,
-    channelTitle = channelTitle,
-    channelId = channelId,
-    videoOwnerChannelTitle = videoOwnerChannelTitle,
-    videoOwnerChannelId = videoOwnerChannelId
+fun PlaylistItemDto.toPlaylistItemView() = PlaylistItemView(
+    id = item.id,
+    description = item.description,
+    position = item.position,
+    playlistId = item.playlistId,
+    title = item.title,
+    thumbnails = thumbnail,
+    publishedAt = DateTime.parseRfc3339(item.publishedAt),
+    channelTitle = item.channelTitle,
+    channelId = item.channelId,
+    videoOwnerChannelTitle = item.videoOwnerChannelTitle,
+    videoOwnerChannelId = item.videoOwnerChannelId
 )

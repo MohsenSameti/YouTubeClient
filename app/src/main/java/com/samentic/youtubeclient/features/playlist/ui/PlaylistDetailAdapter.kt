@@ -89,7 +89,7 @@ class PlaylistDetailAdapter(
         }
 
         fun bind(item: PlaylistItemView) {
-            loadImage(binding.ivThumbnail, item.thumbnails.medium.url)
+            loadImage(binding.ivThumbnail, item.thumbnails?.mediumUrl)
             binding.tvTitle.let { tvTitle ->
                 tvTitle.text = item.title
                 TooltipCompat.setTooltipText(tvTitle, item.title)

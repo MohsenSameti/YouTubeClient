@@ -1,9 +1,7 @@
 package com.samentic.youtubeclient.features.playlist.ui
 
 import android.util.Log
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import com.samentic.youtubeclient.core.ui.pagination.PagedResult
 import com.samentic.youtubeclient.features.playlist.data.PlaylistItemEntity
 import com.samentic.youtubeclient.features.playlist.data.PlaylistsRepository
@@ -25,19 +23,26 @@ class PlaylistDetailViewModel @Inject constructor(
     lateinit var playlistId: String
         private set
 
-    val playlistItems = MutableLiveData<List<PlaylistItemView>>()
+    private var currentPage = 1
+    private val currentPageLiveData = MutableLiveData<Int>()
+
+    val playlistItems = currentPageLiveData.switchMap {
+        playlistsRepository.getPlaylistItems(playlistId, currentPage, itemsPerPage)
+            .distinctUntilChanged()
+            .map { items -> items.map { item -> item.toPlaylistItemView() } }
+    }
 
     // page data
     private var totalItems: Int = -1
     private var itemsPerPage: Int = 15//50
     private var nextPageToken: String? = null
-    private var currentPage = 1
 
     private var job: Job? = null
 
     fun setPlaylistId(id: String) {
         if (this::playlistId.isInitialized && playlistId == id) return
         playlistId = id
+        currentPageLiveData.value = currentPage
         fetchPlaylistItems()
     }
 
@@ -62,10 +67,7 @@ class PlaylistDetailViewModel @Inject constructor(
                 "page:$currentPage,total:$totalItems,items:$itemsPerPage,token:$pageToken"
             )
             withContext(Dispatchers.Main) {
-                playlistItems.value = buildList {
-                    addAll(playlistItems.value.orEmpty())
-                    addAll(paged.data.map { it.toPlaylistItemView() })
-                }
+                currentPageLiveData.value = currentPage
                 moreLoading.value = false
                 loading.value = false
             }
@@ -81,11 +83,9 @@ class PlaylistDetailViewModel @Inject constructor(
             var page = 1
             var token: String? = null
             var result: PagedResult<List<PlaylistItemEntity>>
-            val items = mutableListOf<PlaylistItemView>()
             do {
                 result = getPage(token)
                 token = result.nextPageToken
-                items.addAll(result.data.map { it.toPlaylistItemView() })
                 Log.d("YouTubeTAG", "refresh: page:$page,token:$token")
             } while (++page <= currentPage || token == null)
             currentPage = min(1, page - 1)
@@ -95,7 +95,6 @@ class PlaylistDetailViewModel @Inject constructor(
             withContext(Dispatchers.Main) {
                 loading.value = false
                 moreLoading.value = false
-                playlistItems.value = items
             }
         }
     }

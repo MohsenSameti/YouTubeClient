@@ -5,12 +5,12 @@ import androidx.room.Relation
 import com.samentic.youtubeclient.core.data.db.thumbnail.ThumbnailEntity
 import com.samentic.youtubeclient.core.data.db.thumbnail.ThumbnailType
 
-data class PlaylistDto(
+data class PlaylistItemDto(
     @Embedded
-    val playlist: PlaylistEntity,
+    val item: PlaylistItemEntity,
     @Relation(parentColumn = "id", entityColumn = "ownerId", entity = ThumbnailEntity::class)
     val thumbnails: List<ThumbnailEntity>
 ) {
     val thumbnail: ThumbnailEntity?
-        get() = thumbnails.firstOrNull { it.ownerType == ThumbnailType.Playlist }
+        get() = thumbnails.firstOrNull { it.ownerType == ThumbnailType.PlaylistItem }
 }

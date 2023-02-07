@@ -16,6 +16,9 @@ class PlaylistsRepository @Inject constructor(
     fun getPlaylists(page: Int, pageSize: Int) =
         playlistLocalDataSource.getPlaylists((page * pageSize).toLong())
 
+    fun getPlaylistItems(playlistId: String, page: Int, pageSize: Int) =
+        playlistLocalDataSource.getPlaylistItems(playlistId, (page * pageSize).toLong())
+
     // todo: rename to myPlayLists
     // todo: add paging
     suspend fun fetchPlaylists(): List<PlaylistEntity> {
@@ -50,8 +53,14 @@ class PlaylistsRepository @Inject constructor(
                 .setPageToken(pageToken)
                 .execute()
 
+            val items = response.items.map { it.toPlaylistItemEntity() }
+            val thumbnails = response.items.map { it.toThumbnailEntity() }
+
+            playlistLocalDataSource.insertPlaylistItems(id, items, isFirstPage = pageToken == null)
+            thumbnailLocalDataSource.insertThumbnails(thumbnails)
+
             PagedResult(
-                data = response.items.map { it.toPlaylistItemEntity() },
+                data = items,
                 nextPageToken = response.nextPageToken,
                 resultsPerPage = response.pageInfo.resultsPerPage,
                 totalResults = response.pageInfo.totalResults

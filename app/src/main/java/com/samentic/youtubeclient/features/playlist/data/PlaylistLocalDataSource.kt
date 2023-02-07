@@ -11,12 +11,27 @@ class PlaylistLocalDataSource @Inject constructor(
 
     fun getPlaylists(limit: Long) = dao.getPlaylists(limit)
 
+    fun getPlaylistItems(playlistId: String, limit: Long) = dao.getPlaylistItems(playlistId, limit)
+
     suspend fun insertPlaylists(playlists: List<PlaylistEntity>, isFirstPage: Boolean) {
         db.withTransaction {
-            if(isFirstPage) {
-                dao.softDeleteAll(System.currentTimeMillis())
+            if (isFirstPage) {
+                dao.softDeleteAllPlaylists(System.currentTimeMillis())
             }
             dao.insertPlaylists(playlists)
+        }
+    }
+
+    suspend fun insertPlaylistItems(
+        playlistId: String,
+        items: List<PlaylistItemEntity>,
+        isFirstPage: Boolean
+    ) {
+        db.withTransaction {
+            if (isFirstPage) {
+                dao.softDeleteAllPlaylistItems(playlistId, System.currentTimeMillis())
+            }
+            dao.insertPlaylistItems(items)
         }
     }
 }
