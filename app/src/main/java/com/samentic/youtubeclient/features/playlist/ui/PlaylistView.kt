@@ -2,7 +2,7 @@ package com.samentic.youtubeclient.features.playlist.ui
 
 import com.google.api.client.util.DateTime
 import com.google.api.services.youtube.model.ThumbnailDetails
-import com.samentic.youtubeclient.features.playlist.data.PlaylistEntity
+import com.samentic.youtubeclient.features.playlist.data.PlaylistDto
 
 data class PlaylistView(
     val id: String,
@@ -16,7 +16,7 @@ data class PlaylistView(
     val playerUrl: String
 )
 
-fun PlaylistEntity.toPlaylistView() = PlaylistView(
+fun PlaylistDto.toPlaylistView() = PlaylistView(
     id = id,
     publishedAt = publishedAt,
     channelId = channelId,

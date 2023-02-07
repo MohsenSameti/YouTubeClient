@@ -6,6 +6,7 @@ import com.samentic.youtubeclient.core.di.viewmodel.ViewModelModule
 import com.samentic.youtubeclient.features.auth.data.AuthModule
 import com.samentic.youtubeclient.features.auth.ui.AuthFragment
 import com.samentic.youtubeclient.features.channel.ui.ChannelDetailFragment
+import com.samentic.youtubeclient.features.playlist.data.PlaylistModule
 import com.samentic.youtubeclient.features.playlist.ui.PlaylistDetailFragment
 import com.samentic.youtubeclient.features.playlist.ui.PlaylistsFragment
 import com.samentic.youtubeclient.features.susbcription.data.SubscriptionModule
@@ -19,7 +20,8 @@ import javax.inject.Singleton
     modules = [
         ViewModelModule::class, ContextModule::class, LocalModule::class,
         AuthModule::class, YoutubeModule::class,
-        SubscriptionModule::class, ThumbnailModule::class
+        SubscriptionModule::class, ThumbnailModule::class,
+        PlaylistModule::class
     ]
 )
 interface AppComponent {
