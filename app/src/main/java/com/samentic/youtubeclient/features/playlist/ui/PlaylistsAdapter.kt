@@ -42,7 +42,7 @@ class PlaylistsAdapter(
         }
 
         fun bind(item: PlaylistView) {
-            loadImage(binding.ivThumbnail, item.thumbnail.medium.url)
+            loadImage(binding.ivThumbnail, item.thumbnail?.mediumUrl)
             binding.tvItemCount.text = binding.root.context.getString(
                 R.string.label_videos_count,
                 item.itemCount

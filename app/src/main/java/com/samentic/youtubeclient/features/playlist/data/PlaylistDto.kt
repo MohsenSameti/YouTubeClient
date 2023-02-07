@@ -1,22 +1,20 @@
 package com.samentic.youtubeclient.features.playlist.data
 
-import com.google.api.client.util.DateTime
+import androidx.room.Embedded
+import androidx.room.Relation
 import com.google.api.services.youtube.model.Playlist
-import com.google.api.services.youtube.model.ThumbnailDetails
 import com.samentic.youtubeclient.core.data.db.thumbnail.ThumbnailEntity
 import com.samentic.youtubeclient.core.data.db.thumbnail.ThumbnailType
 
 data class PlaylistDto(
-    val id: String,
-    val publishedAt: DateTime,
-    val channelId: String,
-    val title: String,
-    val channelTitle: String,
-    val description: String?,
-    val thumbnail: ThumbnailDetails,
-    val itemCount: Long,
-    val playerUrl: String
-)
+    @Embedded
+    val playlist: PlaylistEntity,
+    @Relation(parentColumn = "id", entityColumn = "ownerId", entity = ThumbnailEntity::class)
+    val thumbnails: List<ThumbnailEntity>
+) {
+    val thumbnail: ThumbnailEntity?
+        get() = thumbnails.firstOrNull { it.ownerType == ThumbnailType.Playlist }
+}
 
 fun Playlist.toPlaylistEntity() = PlaylistEntity(
     id = id,

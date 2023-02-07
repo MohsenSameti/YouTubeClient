@@ -14,4 +14,6 @@ data class PlaylistEntity(
     val description: String?,
     val itemCount: Long,
     val playerUrl: String
-)
+) {
+    var softDeleteTime: Long? = null
+}

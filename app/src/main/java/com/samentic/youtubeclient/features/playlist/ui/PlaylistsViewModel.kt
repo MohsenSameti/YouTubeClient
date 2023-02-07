@@ -1,8 +1,6 @@
 package com.samentic.youtubeclient.features.playlist.ui
 
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import com.samentic.youtubeclient.features.playlist.data.PlaylistsRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -13,7 +11,15 @@ class PlaylistsViewModel @Inject constructor(
     private val playlistsRepository: PlaylistsRepository
 ) : ViewModel() {
 
-    val playlists = MutableLiveData<List<PlaylistView>>()
+    private var itemsPerPage = 50
+    private var currentPage = 1
+
+    private val currentPageLiveData = MutableLiveData<Int>(currentPage)
+    val playlists = currentPageLiveData.switchMap {
+        playlistsRepository.getPlaylists(currentPage, itemsPerPage)
+            .distinctUntilChanged()
+            .map { playlists -> playlists.map { playlist -> playlist.toPlaylistView() } }
+    }
 
     val loading = MutableLiveData<Boolean>()
 
@@ -24,9 +30,9 @@ class PlaylistsViewModel @Inject constructor(
     fun fetchPlaylists() {
         loading.value = true
         viewModelScope.launch(Dispatchers.IO) {
-            val playlists = playlistsRepository.fetchPlaylists().map { it.toPlaylistView() }
+            playlistsRepository.fetchPlaylists()
             withContext(Dispatchers.Main) {
-                this@PlaylistsViewModel.playlists.value = playlists
+                currentPageLiveData.value = currentPage
                 loading.value = false
             }
         }

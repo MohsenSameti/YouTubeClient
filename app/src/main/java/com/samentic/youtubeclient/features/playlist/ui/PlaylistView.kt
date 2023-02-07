@@ -1,7 +1,7 @@
 package com.samentic.youtubeclient.features.playlist.ui
 
 import com.google.api.client.util.DateTime
-import com.google.api.services.youtube.model.ThumbnailDetails
+import com.samentic.youtubeclient.core.data.db.thumbnail.ThumbnailEntity
 import com.samentic.youtubeclient.features.playlist.data.PlaylistDto
 
 data class PlaylistView(
@@ -11,19 +11,19 @@ data class PlaylistView(
     val title: String,
     val channelTitle: String,
     val description: String?,
-    val thumbnail: ThumbnailDetails,
+    val thumbnail: ThumbnailEntity?, // TODO: add error placeholder if it is null!
     val itemCount: Long,
     val playerUrl: String
 )
 
 fun PlaylistDto.toPlaylistView() = PlaylistView(
-    id = id,
-    publishedAt = publishedAt,
-    channelId = channelId,
-    title = title,
-    channelTitle = channelTitle,
-    description = description,
+    id = playlist.id,
+    publishedAt = DateTime.parseRfc3339(playlist.publishedAt),
+    channelId = playlist.channelId,
+    title = playlist.title,
+    channelTitle = playlist.channelTitle,
+    description = playlist.description,
     thumbnail = thumbnail,
-    itemCount = itemCount,
-    playerUrl = playerUrl
+    itemCount = playlist.itemCount,
+    playerUrl = playlist.playerUrl
 )

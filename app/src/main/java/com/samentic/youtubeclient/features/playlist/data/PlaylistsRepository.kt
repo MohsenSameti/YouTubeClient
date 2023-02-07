@@ -13,9 +13,12 @@ class PlaylistsRepository @Inject constructor(
     private val thumbnailLocalDataSource: ThumbnailLocalDataSource
 ) {
 
+    fun getPlaylists(page: Int, pageSize: Int) =
+        playlistLocalDataSource.getPlaylists((page * pageSize).toLong())
+
     // todo: rename to myPlayLists
     // todo: add paging
-    suspend fun fetchPlaylists(): List<PlaylistDto> {
+    suspend fun fetchPlaylists(): List<PlaylistEntity> {
         return authRepository.ensureAccessToken {
             // TODO: handle possible exceptions
             val response = youtube.playlists()
@@ -28,21 +31,9 @@ class PlaylistsRepository @Inject constructor(
             val thumbnails = response.items.map { it.toThumbnailEntity() }
 
             thumbnailLocalDataSource.insertThumbnails(thumbnails)
-            playlistLocalDataSource.insertPlaylists(playlists)
+            playlistLocalDataSource.insertPlaylists(playlists, isFirstPage = true)
 
-            response.items.map {
-                PlaylistDto(
-                    id = it.id,
-                    publishedAt = it.snippet.publishedAt,
-                    channelId = it.snippet.channelId,
-                    title = it.snippet.title,
-                    channelTitle = it.snippet.channelTitle,
-                    description = it.snippet.description,
-                    thumbnail = it.snippet.thumbnails,
-                    itemCount = it.contentDetails.itemCount,
-                    playerUrl = it.player.embedHtml
-                )
-            }
+            playlists
         }
     }
 
